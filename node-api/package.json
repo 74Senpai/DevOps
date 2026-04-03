@@ -1,7 +1,7 @@
 {
   "name": "node-api",
   "version": "1.0.0",
-  "description": "Lab6 - NodeJS API with MySQL + Docker Compose",
+  "description": "Kiem tra DevOps giua ky",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"

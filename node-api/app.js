@@ -7,11 +7,13 @@ app.use(cors());
 app.use(express.json()); // để đọc body JSON
 
 // Kết nối DB
+require('dotenv').config();
+
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || "127.0.0.1",
-    user: "root",
-    password: "root",
-    database: "appdb"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 // Kết nối DB
@@ -49,13 +51,15 @@ app.get('/api-node/tasks', (req, res) => {
 // 1. Trang thông tin cá nhân (/about)
 // =======================
 app.get('/about', (req, res) => {
-    res.json({
-        hoTen: "Nguyễn Văn A",      // sửa lại của bạn
-        maSoSinhVien: "12345678",   // sửa lại
-        lop: "CNTT01"               // sửa lại
+    db.query("SELECT hoTen, maSoSinhVien, lop FROM students LIMIT 1", (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        if (result.length === 0) {
+            return res.json(null);
+        }
+        res.json(result[0]);
     });
 });
-
 
 // =======================
 // 2. Health Check (/health)
@@ -87,6 +91,28 @@ app.post('/api-node/tasks', (req, res) => {
     });
 });
 
+app.post('/students', (req, res) => {
+    const { hoTen, maSoSinhVien, lop } = req.body;
+
+    if (!hoTen || !maSoSinhVien || !lop) {
+        return res.status(400).json({ error: "Thiếu dữ liệu" });
+    }
+
+    db.query("SELECT COUNT(*) as count FROM students", (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        if (result[0].count > 0) {
+            return res.status(400).json({ error: "Student đã tồn tại" });
+        }
+
+        const sql = "INSERT INTO students (hoTen, maSoSinhVien, lop) VALUES (?, ?, ?)";
+        db.query(sql, [hoTen, maSoSinhVien, lop], (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+
+            res.json({ message: "Tạo student thành công" });
+        });
+    });
+});
 
 // =======================
 app.listen(3000, () => {

@@ -25,6 +25,15 @@ CREATE TABLE tasks (
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    hoTen VARCHAR(255) NOT NULL,
+    maSoSinhVien VARCHAR(50) NOT NULL UNIQUE,
+    lop VARCHAR(50) NOT NULL
+);
+
+-- Dữ liệu mẫu
+
 -- Dữ liệu mẫu
 INSERT INTO tasks (title, description) VALUES
 ('Học CI/CD', 'Tìm hiểu pipeline CI/CD'),
