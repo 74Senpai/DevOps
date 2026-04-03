@@ -1,10 +1,41 @@
 SET NAMES 'utf8mb4';
-CREATE DATABASE IF NOT EXISTS appdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE appdb;
 
-CREATE TABLE IF NOT EXISTS tasks (
+-- Xóa DB cũ nếu tồn tại (cẩn thận)
+DROP DATABASE IF EXISTS DevOps;
+
+-- Tạo DB mới
+CREATE DATABASE DevOps
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE DevOps;
+
+-- Tạo bảng tasks
+CREATE TABLE tasks (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    title VARCHAR(255) 
+        CHARACTER SET utf8mb4 
+        COLLATE utf8mb4_unicode_ci 
+        NOT NULL,
+    description TEXT 
+        CHARACTER SET utf8mb4 
+        COLLATE utf8mb4_unicode_ci,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO tasks (title) VALUES ('Học CI/CD'), ('Triển khai Docker');
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    hoTen VARCHAR(255) NOT NULL,
+    maSoSinhVien VARCHAR(50) NOT NULL UNIQUE,
+    lop VARCHAR(50) NOT NULL
+);
+
+-- Dữ liệu mẫu
+
+-- Dữ liệu mẫu
+INSERT INTO tasks (title, description) VALUES
+('Học CI/CD', 'Tìm hiểu pipeline CI/CD'),
+('Triển khai Docker', 'Build và deploy container'),
+('Viết API NodeJS', 'Kết nối MySQL');
