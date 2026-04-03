@@ -26,13 +26,6 @@ services:
     depends_on:
       - mysql
 
-  python-api:
-    build: ./python-api
-    environment:
-      DATABASE_URL: mysql+pymysql://root:root@mysql/appdb
-    depends_on:
-      - mysql
-
   frontend:
     build: ./frontend
     ports:
